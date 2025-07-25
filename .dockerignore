@@ -1,0 +1,11 @@
+# Evita enviar arquivos inúteis pro build
+.git
+.github
+.vscode
+node_modules
+*.exe
+*.zip
+*.tar
+*.gz
+
+
