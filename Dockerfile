@@ -1,26 +1,15 @@
-# Imagem base mínima
-FROM alpine:latest
+FROM debian:bullseye-slim
 
-# Cria diretório de trabalho
 WORKDIR /app
 
-# Copia o binário Linux do PocketBase para dentro do container
-# (renomeie seu binário para “pocketbase” — sem .exe)
-COPY pocketbase .
+# Instala dependências básicas (como libsqlite3)
+RUN apt-get update && apt-get install -y ca-certificates curl sqlite3 && rm -rf /var/lib/apt/lists/*
 
-# Garante permissão de execução
-RUN chmod +x /app/pocketbase
+COPY pocketbase /app/pocketbase
+COPY start.sh /app/start.sh
 
-# (Opcional) copie pb_data se já quiser levar dados/coleções iniciais
-# COPY pb_data ./pb_data
+RUN chmod +x /app/pocketbase /app/start.sh
 
-# Copia o script de inicialização
-COPY start.sh .
-RUN chmod +x /app/start.sh
-
-# A porta que o Railway expõe por padrão
-ENV PORT 8080
 EXPOSE 8080
 
-# Comando de start
 CMD ["./start.sh"]
